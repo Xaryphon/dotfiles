@@ -1,0 +1,47 @@
+set $theme_dir ~/.uconfig/themes/default
+
+# font
+font pango:DejaVu Sans Book 8
+
+# colors
+
+set $bg-color            #2f343f
+set $inactive-bg-color   #2f343f
+set $text-color          #f3f4f5
+set $inactive-text-color #676E7D
+set $urgent-bg-color     #E53935
+
+set $bg-colora           #2f343f
+
+# window colors
+#                       border              background         text                 indicator
+client.focused          $bg-color           $bg-color          $text-color          #00ff00
+client.unfocused        $inactive-bg-color  $inactive-bg-color $inactive-text-color #00ff00
+client.focused_inactive $inactive-bg-color  $inactive-bg-color $inactive-text-color #00ff00
+client.urgent           $urgent-bg-color    $urgent-bg-color   $text-color          #00ff00
+
+hide_edge_borders both
+
+# status bar
+bar {
+        status_command i3blocks
+        font pango:DejaVu Sans Book 8
+        tray_output primary
+
+        position top
+        colors {
+                background $bg-color
+                separator #757575
+                #                  border             background         text
+                focused_workspace  $bg-color          $bg-color          $text-color
+                inactive_workspace $inactive-bg-color $inactive-bg-color $inactive-text-color
+                urgent_workspace   $urgent-bg-color   $urgent-bg-color   $text-color
+        }
+}
+
+# application launcher
+#bindsym $mod+d exec "rofi -show run -lines 3 -eh 2 -bc 2 -width 100 -padding 350 -color-normal \\"$bg-colora,$text-color,$bg-colora,$bg-colora,#9575cd\\" -color-window \\"$bg-colora,$bg-colora,gray\\""
+bindsym $mod+d exec "rofi -show drun -show-icons -modi drun#run#window -columns 1 -lines 10 -width 768 -location 0 -padding 10 -sidebar-mode -monitor -4 -eh 2 -color-normal \\"$bg-colora,$text-color,$bg-colora,$bg-colora,#9575cd\\" -color-window \\"$bg-colora,$bg-colora,gray\\""
+
+# restore last wallpaper
+exec feh --bg-fill ~/.wallpaper_scaled

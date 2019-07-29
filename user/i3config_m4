@@ -1,0 +1,199 @@
+# i3 config file (v4)
+divert(-1)
+define(`definewsr', `dnl
+    set `$ws'$1 "$1:$3"
+        bindsym $mod+$2 workspace `$ws'$1
+        bindsym $mod+$alt+$2 move container to workspace `$ws'$1')
+define(`definews', `definewsr(0`eval($1 - 1)', `eval($1 % 10)', `$1')')
+define(`definewss', `definewsr(1`eval($1 - 1)', `$alt2+eval($1 % 10)', `eval($1 % 10) '$2)')
+define(`for',`ifelse($#,0,``$0'',`ifelse(eval($2<=$3),1,
+`pushdef(`$1',$2)$4`'popdef(`$1')$0(`$1',incr($2),$3,`$4')')')')
+define(`host', esyscmd(hostname))
+divert(1)dnl
+
+## General Keys
+    set $mod Mod4
+    set $alt Shift
+    set $alt2 Mod1
+    set $ctrl Ctrl
+
+    set $left j
+    set $right l
+    set $up i
+    set $down k
+
+## Workspaces
+for(`i',1,10,`definews(i)
+')
+definewss(1, `')
+definewss(2, `')
+definewss(3, `')
+definewss(4, `')
+definewss(5, `')
+
+## Key Binds
+### General
+    bindsym $mod+Return exec lxterminal
+### Configs
+    bindsym $mod+$alt+Return exec code-oss -n ~/.uconfig/
+    bindsym $mod+$alt+r exec ~/.uconfig/update.sh
+### System
+    bindsym $mod+$alt+x exec ~/.lock
+    bindsym $mod+$ctrl+End exec poweroff
+    bindsym $mod+$ctrl+$alt+End exec reboot
+### Screenshot
+    bindsym Print exec flameshot gui
+    bindsym $mod+Print exec flameshot full -c
+    bindsym $mod+$alt+Print exec flameshot screen -c
+### Containers
+#### General
+    bindsym $mod+$alt+q kill
+    bindsym $mod+f fullscreen toggle
+#### Focus
+    bindsym $mod+$left  focus left
+    bindsym $mod+$right focus right
+    bindsym $mod+$up    focus up
+    bindsym $mod+$down  focus down
+
+    bindsym $mod+space focus mode_toggle
+
+    bindsym $mod+a focus parent
+    bindsym $mod+z focus child
+#### Edit Current
+    bindsym $mod+$alt+$left  move left
+    bindsym $mod+$alt+$right move right
+    bindsym $mod+$alt+$up    move up
+    bindsym $mod+$alt+$down  move down
+    bindsym $mod+$alt+space floating toggle
+
+    bindsym $mod+r mode "resize"
+    mode "resize" {
+        # Normal
+        bindsym $left  resize shrink width  10 px or 10 ppt
+        bindsym $right resize grow   width  10 px or 10 ppt
+        bindsym $up    resize shrink height 10 px or 10 ppt
+        bindsym $down  resize grow   height 10 px or 10 ppt
+
+        # Large
+        bindsym $alt+$left  resize shrink width  50 px or 50 ppt
+        bindsym $alt+$right resize grow   width  50 px or 50 ppt
+        bindsym $alt+$up    resize shrink height 50 px or 50 ppt
+        bindsym $alt+$down  resize grow   height 50 px or 50 ppt
+
+        # Fine
+        bindsym $alt2+$left  resize shrink width  1 px or 1 ppt
+        bindsym $alt2+$right resize grow   width  1 px or 1 ppt
+        bindsym $alt2+$up    resize shrink height 1 px or 1 ppt
+        bindsym $alt2+$down  resize grow   height 1 px or 1 ppt
+
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+    }
+#### Edit Layout
+    bindsym $mod+h split h
+    bindsym $mod+v split v
+### Special
+    bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume (Media, etc...)
+    bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume (Media, etc...)
+    bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
+
+    bindsym XF86AudioPlay exec playerctl play-pause
+    bindsym XF86AudioStop exec playerctl stop
+    bindsym XF86AudioNext exec playerctl next
+    bindsym XF86AudioPrev exec playerctl prev
+
+    bindsym XF86MonBrightnessUp exec xbacklight -inc 25 # increase screen brightness
+    bindsym XF86MonBrightnessDown exec xbacklight -dec 25 # decrease screen brightness
+## Containers
+### Defaults: Floating
+    for_window [class="Tor Browser"] floating enable
+    for_window [class="Galculator"] floating enable
+    for_window [class="PCSX2"] floating enable
+    #for_window [class="Virt-manager" window_type=normal title="^(.(?!Virtual Machine Manager))*$"] floating enable
+    for_window [class="Steam"] floating enable, [title="^Steam$"] floating disable
+    for_window [class="Qemu-system-x86_64"] floating enable
+    for_window [class="Godot"] floating enable, [title="^Godot Engine - "] floating disable
+    for_window [class="flameshot"] floating enable
+    for_window [class="Wine"] floating enable
+    for_window [class="VirtualBox Machine"] floating enable
+    for_window [class="scrcpy"] floating enable
+    for_window [class="kmines"] floating enable
+    for_window [class="Wine" instance="ti-nspire cx cas student software.exe"] floating enable, [title="TI-Nspire� CX CAS Student Software"] floating disable
+### Defaults: Fullscreen
+    for_window [class="feh"] fullscreen enable
+    #for_window [class="Xephyr"] fullscreen disable
+    for_window [class="Wine" instance="league of legends.exe"] fullscreen enable
+    for_window [class="Wine" instance="warframe.x64.exe"] fullscreen enable
+    for_window [class="Wine" instance="gta5.exe"] fullscreen enable
+### Defaults: General
+    for_window [tiling] border none
+    for_window [floating] border normal
+### Defaults: Borders
+    for_window [class="Chromium"] border none
+    for_window [class="discord"] border none
+    for_window [class="Lxterminal"] border pixel 5
+    #for_window [class="Lxterminal"] border normal
+    for_window [class="URxvt"] border none
+    for_window [class="Steam"] border none
+    for_window [class="vlc"] border none
+    for_window [class="Wine" instance="leagueclientux.exe"] border none
+    for_window [class="Wine" instance="gtavlauncher.exe"] border none
+### Workspace Assignmentes
+    assign [class="KeePass2"] $ws11
+    assign [class="keepassxc"] $ws11
+
+    assign [class="Rhythmbox"] $ws12
+    assign [class="banshee"] $ws12
+    # if started with "lxterminal -t cmus -e cmus"
+    assign [class="Lxterminal" title="^cmus$"] $ws12
+
+    assign [class="discord"] $ws13
+
+    assign [class="Wine" instance="league of legends.exe"] $ws14
+    assign [class="Wine" instance="leagueclientux.exe"] $ws14
+    assign [class="Wine" instance="warframe.x64.exe"] $ws14
+    assign [class="Wine" instance="gta5.exe"] $ws14
+    assign [class="Wine" instance="gtavlauncher.exe"] $ws14
+
+    assign [class="obs"] $ws15
+### Host host specific
+ifelse(host, `xpcarch', `dnl
+    exec xrandr --output DVI-D-0 --off \
+        --output DP-0 --primary --mode 1920x1080 --rate 144 \
+        --output DP-1 --off \
+        --output DP-2 --off \
+        --output DP-3 --off \
+        --output HDMI-0 --off \
+        --output HDMI-1 --mode 1920x1080 --rate 60 --left-of DP-0
+    set $out1 DP-0
+    set $out2 HDMI-1
+
+    bindsym $mod+$alt2+j move workspace to output left
+    bindsym $mod+$alt2+l move workspace to output right
+    bindsym $mod+$alt2+i move workspace to output up
+    bindsym $mod+$alt2+k move workspace to output down
+
+    workspace $ws11 output $out2 # password manager
+    workspace $ws12 output $out2 # music
+    workspace $ws13 output $out2 # IM / voice
+    workspace $ws14 output $out1 # games
+    workspace $ws15 output $out2 # obs
+
+    # HIDE ALL ($hide2 has ZWSP)
+    set $hide1 "HIDDEN"
+    set $hide2 "HIDDEN​"
+    workspace $hide1 output $out1
+    workspace $hide2 output $out2
+    bindsym $mod+m workspace $hide1, workspace $hide2
+
+    # KDE Connect
+    exec kdeconnect-indicator
+    bindsym $mod+c exec kdeconnect-handler $(xclip -o -selection clipboard)
+
+    bindsym $mod+n exec ~/systemctl.toggle.sh sshd
+', host, `xltarch', `dnl
+    bindsym $mod+m exec ~/systemctl.toggle.sh ModemManager
+    bindsym $mod+n exec ~/systemctl.toggle.sh sshd
+    exec nm-applet --no-agent
+', `dnl
+')dnl

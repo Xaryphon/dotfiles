@@ -1,0 +1,42 @@
+#smart_gaps on
+#gaps outer 10
+#gaps inner 21
+
+set $theme_dir ~/.uconfig/themes/default
+
+# font
+font pango:DejaVu Sans Book 8
+
+# colors
+
+set $bg-color            #000000B3
+set $text-color          #FFFFFF
+set $inactive-text-color #AAAAAA
+set $urgent-bg-color     #AA0000
+
+# TODO: configure rofi colors
+set $bg-colora           #B3000000
+
+#background $bg-color
+
+# window colors
+#                       border              background         text                 indicator
+client.focused          $bg-color           $bg-color          $text-color          $bg-color
+client.focused_inactive $bg-color           $bg-color          $inactive-text-color $bg-color
+client.unfocused        $bg-color           $bg-color          $inactive-text-color $bg-color
+client.urgent           $urgent-bg-color    $urgent-bg-color   $text-color          $bg-color
+client.placeholder      $bg-color           $bg-color          $text-color          $bg-color
+
+client.background $bg-color
+
+hide_edge_borders both
+
+# application launcher
+bindsym $mod+d exec "rofi -show drun -show-icons -modi drun#run#window \
+    -columns 1 -lines 10 -width 768 -location 0 -padding 10 -sidebar-mode \
+    -monitor -4 -eh 2 \
+    -color-normal \\"#00000000,$inactive-text-color,#00000000,#00000000,$text-color\\" \
+    -color-window \\"$bg-colora,$bg-colora,#555555\\""
+
+# restore last wallpaper
+exec feh --no-xinerama --bg-fill ~/.wallpaper

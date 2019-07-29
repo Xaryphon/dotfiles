@@ -1,0 +1,95 @@
+# outputs
+exec xrandr --output DVI-D-0 --off \
+    --output DP-0 --primary --mode 1920x1080 --rate 144 \
+    --output DP-1 --off \
+    --output DP-2 --off \
+    --output DP-3 --off \
+    --output HDMI-0 --off \
+    --output HDMI-1 --mode 1920x1080 --rate 60 --left-of DP-0
+set $out1 DP-0
+set $out2 HDMI-1
+
+# output keybinds
+bindsym $mod+$alts+j move workspace to output left
+bindsym $mod+$alts+l move workspace to output right
+bindsym $mod+$alts+i move workspace to output up
+bindsym $mod+$alts+k move workspace to output down
+
+# workspace -> output
+workspace $ws09 output $out1 # games
+workspace $ws10 output $out2 # music
+workspace $ws11 output $out2 # password manager
+workspace $ws12 output $out2 # IM / voice
+workspace $ws13 output $out2 # OBS
+
+# Initial workspaces
+exec i3-msg focus output $out2 && i3-msg workspace $ws01 && i3-msg focus output $out1 && i3-msg workspace $ws02
+
+# Music controls
+bindsym XF86AudioPlay exec playerctl -p mpd play-pause
+bindsym XF86AudioStop exec playerctl -p mpd pause && playerctl -p mpd position 0
+bindsym XF86AudioNext exec playerctl -p mpd next
+bindsym XF86AudioPrev exec playerctl -p mpd previous
+
+# HIDE ALL ($hide2 has ZWSP)
+set $hide1 "HIDDEN"
+set $hide2 "HIDDEN​"
+workspace $hide1 output $out1
+workspace $hide2 output $out2
+bindsym $mod+m workspace $hide1, workspace $hide2
+
+# KDE Connect
+exec kdeconnect-indicator
+bindsym $mod+c exec kdeconnect-handler $(xclip -o -selection clipboard)
+
+# ADB
+exec sudo adb start-server
+
+# Numlock
+exec numlockx
+
+# Auto Clicker
+bindsym $mod+o exec ~/Projects/Synced/Singles/instance.sh /run/user/1000/autoclicker ~/Projects/Synced/Singles/autoclicker.sh
+
+# Primary Monitor Bar
+bar {
+        status_command env MINIMAL=1 i3blocks
+        i3bar_command i3bar -t
+        font pango:DejaVu Sans Book, FontAwesome 8.5
+        tray_output none
+        output $out1
+
+        position top
+        colors {
+                background #000000B3
+                separator #808080
+                #                  border             background         text
+                focused_workspace  $bg-color          $bg-color          $text-color
+                active_workspace   $bg-color          $bg-color          $text-color
+                inactive_workspace $bg-color          $bg-color          $inactive-text-color
+                urgent_workspace   $urgent-bg-color   $urgent-bg-color   $text-color
+        }
+}
+
+# Secondary Monitor Bar
+bar {
+        status_command i3blocks
+        i3bar_command i3bar -t
+        font pango:DejaVu Sans Book, FontAwesome 8.5
+        output $out2
+
+        position top
+        colors {
+                background #000000B3
+                separator #808080
+                #                  border             background         text
+                focused_workspace  $bg-color          $bg-color          $text-color
+                active_workspace   $bg-color          $bg-color          $text-color
+                inactive_workspace $bg-color          $bg-color          $inactive-text-color
+                urgent_workspace   $urgent-bg-color   $urgent-bg-color   $text-color
+        }
+}
+
+#exec ~/boot_log.sh
+
+exec glava

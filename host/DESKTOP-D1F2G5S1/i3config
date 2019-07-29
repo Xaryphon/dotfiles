@@ -1,0 +1,38 @@
+# status bar
+bar {
+        status_command i3blocks
+        i3bar_command i3bar -t
+        font pango:DejaVu Sans Book 8.5
+
+        position top
+        colors {
+                background #000000B3
+                separator #808080
+                #                  border             background         text
+                focused_workspace  $bg-color          $bg-color          $text-color
+                active_workspace   $bg-color          $bg-color          $text-color
+                inactive_workspace $bg-color          $bg-color          $inactive-text-color
+                urgent_workspace   $urgent-bg-color   $urgent-bg-color   $text-color
+        }
+}
+
+# Screen brightness controls
+bindsym XF86MonBrightnessUp exec xbacklight -set 100 # increase screen brightness
+bindsym XF86MonBrightnessDown exec xbacklight -set 0 # decrease screen brightness
+
+# Music controls
+bindsym XF86AudioPlay exec playerctl play-pause
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous
+
+# Systemd
+bindsym $mod+m exec ~/systemctl.toggle.sh ModemManager
+bindsym $mod+n exec ~/systemctl.toggle.sh sshd
+
+# Clipboard Translator
+bindsym $mod+$alts+j exec ~/ClipboardTranslators/FI
+bindsym $mod+$alts+k exec ~/ClipboardTranslators/EN
+bindsym $mod+$alts+l exec ~/ClipboardTranslators/SV
+
+# Auto start
+exec nm-applet --no-agent

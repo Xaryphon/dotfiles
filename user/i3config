@@ -1,0 +1,232 @@
+# i3 config file (v4)
+
+# general
+    # keys
+        set $mod Mod4
+        set $alt Shift
+        set $alts Ctrl
+
+        set $left j
+        set $right l
+        set $up i
+        set $down k
+# system
+    # terminal
+        bindsym $mod+Return exec konsole
+        bindsym $mod+$alt+Return exec vscodium -n ~/.uconfig/
+    # change theme
+        #bindsym $mod+$alt+c exec ~/.user/theme_chooser.sh dmenu
+    # restart i3
+        bindsym $mod+$alt+r exec ~/.uconfig/update.sh
+    # exit i3
+        #bindsym $mod+$alt+e exit
+    # lock
+        bindsym $mod+$alt+x exec ~/.lock
+    # power
+        # TODO: Make a better keybind for shutdown & make one for reboot
+        bindsym Ctrl+Mod1+End exec systemctl poweroff
+    # screenshot
+        bindsym Print exec flameshot gui
+        bindsym $mod+Print exec flameshot full -c
+        bindsym $mod+$alt+Print exec flameshot screen -c
+# container keybinds
+    # change focus
+        bindsym $mod+$left  focus left
+        bindsym $mod+$right focus right
+        bindsym $mod+$up    focus up
+        bindsym $mod+$down  focus down
+    # move focused window
+        bindsym $mod+$alt+$left  move left
+        bindsym $mod+$alt+$right move right
+        bindsym $mod+$alt+$up    move up
+        bindsym $mod+$alt+$down  move down
+    # kill window
+        bindsym $mod+$alt+q kill
+    # splits
+        bindsym $mod+h split h
+        bindsym $mod+v split v
+    # fullscreen
+        bindsym $mod+f fullscreen toggle
+    # toggle tiling / floating
+        bindsym $mod+$alt+space floating toggle; [floating] border normal; [floating class="konsole"] border pixel 5; [tiling] border none
+    # change focus between tiling / floating windows
+        bindsym $mod+space focus mode_toggle
+    # focus the parent container
+        bindsym $mod+a focus parent
+    # focus the child container
+        bindsym $mod+z focus child
+    # container layout
+        #bindsym $mod+s layout stacking
+        #bindsym $mod+w layout tabbed
+        #bindsym $mod+e layout toggle split
+    # resize
+        bindsym $mod+r mode "resize"
+        mode "resize" {
+            bindsym $left resize shrink width 10 px or 10 ppt
+            bindsym $right resize grow width 10 px or 10 ppt
+            bindsym $up resize shrink height 10 px or 10 ppt
+            bindsym $down resize grow height 10 px or 10 ppt
+
+            bindsym $alt+$left  resize shrink width  1 px
+            bindsym $alt+$right resize grow   width  1 px
+            bindsym $alt+$up    resize shrink height 1 px
+            bindsym $alt+$down  resize grow   height 1 px
+
+            # back to normal
+            bindsym Return mode "default"
+            bindsym Escape mode "default"
+        }
+    # gaps
+        set $mode_gaps gaps edit | e enable | d disable
+        bindsym $mod+g mode "$mode_gaps"
+        mode "$mode_gaps" {
+            bindsym e gaps outer current set 10, gaps inner current set 21, mode "default"
+            bindsym d gaps outer current set  0, gaps inner current set  0, mode "default"
+
+            bindsym Return mode "default"
+            bindsym Escape mode "default"
+        }
+
+# workspaces
+    # names
+        set $ws01 "1"
+        set $ws02 "2"
+        set $ws03 "3"
+        set $ws04 "4"
+        set $ws05 "5"
+        set $ws06 "6"
+        set $ws07 "7"
+        set $ws08 "8"
+        set $ws09 "9 "
+        set $ws10 "10 "
+        set $ws11 "11 "
+        set $ws12 "12 "
+        set $ws13 "13 "
+    # keybinds
+        # switch to workspace
+            bindsym $mod+1 workspace $ws01
+            bindsym $mod+2 workspace $ws02
+            bindsym $mod+3 workspace $ws03
+            bindsym $mod+4 workspace $ws04
+            bindsym $mod+5 workspace $ws05
+            bindsym $mod+6 workspace $ws06
+            bindsym $mod+7 workspace $ws07
+            bindsym $mod+8 workspace $ws08
+            bindsym $mod+9 workspace $ws09
+            bindsym $mod+0 workspace $ws10, exec cantata
+            bindsym $mod+$alts+1 workspace $ws11, exec keepassxc
+            bindsym $mod+$alts+2 workspace $ws12
+            bindsym $mod+$alts+3 workspace $ws13
+
+        # move focused window to workspace
+            bindsym $mod+$alt+1 move container to workspace $ws01
+            bindsym $mod+$alt+2 move container to workspace $ws02
+            bindsym $mod+$alt+3 move container to workspace $ws03
+            bindsym $mod+$alt+4 move container to workspace $ws04
+            bindsym $mod+$alt+5 move container to workspace $ws05
+            bindsym $mod+$alt+6 move container to workspace $ws06
+            bindsym $mod+$alt+7 move container to workspace $ws07
+            bindsym $mod+$alt+8 move container to workspace $ws08
+            bindsym $mod+$alt+9 move container to workspace $ws09
+            bindsym $mod+$alt+0 move container to workspace $ws10
+
+# media keybinds
+    bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
+    bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
+    bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
+# window modifications
+    # general
+        for_window [class="Tor Browser"] floating enable
+        for_window [class="Galculator"] floating enable
+        for_window [class="PCSX2"] floating enable
+        for_window [class="Virt-manager" window_type=normal] floating enable, [title="^Virtual Machine Manager$"] floating disable
+        for_window [class="Steam"] floating enable, [title="^Steam$"] floating disable
+        for_window [class="Qemu-system-x86_64"] floating enable
+        for_window [class="Godot"] floating enable, [title="^Godot Engine - "] floating disable
+        for_window [class="flameshot"] floating enable
+        for_window [class="Wine"] floating enable
+        for_window [class="VirtualBox Machine"] floating enable
+        for_window [class="scrcpy"] floating enable
+        for_window [class="kmines"] floating enable
+        for_window [class="Wine" instance="ti-nspire cx cas student software.exe"] floating enable, [title="TI-Nspire� CX CAS Student Software"] floating disable
+        for_window [class="Unity"] floating enable
+        for_window [class="HumanResourceMachine.bin.x86_64"] floating enable
+        for_window [class="Desmume"] floating enable
+        for_window [title="^Mesen$"] floating enable
+        for_window [title="^Open$"] floating enable
+        for_window [class="Citra"] floating enable
+        for_window [class="dolphin-emu"] floating enable
+        for_window [class="Hiro"] floating enable
+        for_window [class="sameboy"] floating enable
+        for_window [class="Tangledeep.x86_64"] floating enable
+        for_window [class="pyrogenesis"] floating enable
+        for_window [class="usbguard-applet-qt"] floating enable
+        for_window [class="feh"] floating enable
+        for_window [class="Geeqie"] floating enable
+        for_window [class="gnuplot_qt"] floating enable
+        for_window [class="anbox"] floating enable
+        for_window [class="MultiMC5"] floating enable, [title="^MultiMC"] floating disable
+        for_window [title="Forager by HopFrog"] floating enable
+        for_window [class="copyq"] floating enable
+        for_window [class="Gpaste-ui"] floating enable
+
+        #for_window [class="Xephyr"] fullscreen disable
+        for_window [class="Wine" instance="league of legends.exe"] fullscreen enable
+        for_window [class="Wine" instance="warframe.x64.exe"] fullscreen enable
+        for_window [class="Wine" instance="gta5.exe"] fullscreen enable
+        for_window [class="dotnet" title="^osu.lazer$"] fullscreen enable
+        for_window [class="pyrogenesis"] fullscreen enable
+
+        for_window [tiling] border none
+        for_window [floating] border normal
+
+        for_window [class="Chromium"] border none
+        for_window [class="discord"] border none
+        for_window [class="Lxterminal"] border pixel 5
+        #for_window [class="Lxterminal"] border normal
+        for_window [class="URxvt"] border none
+        for_window [class="konsole"] border pixel 5
+        for_window [class="Steam"] border none
+        for_window [class="vlc"] border none
+        for_window [class="anbox"] border none
+        for_window [class="Wine" instance="leagueclientux.exe"] border none
+        for_window [class="Wine" instance="gtavlauncher.exe"] border none
+        for_window [class="Wine" instance="bethesda.net_launcher.exe"] border none
+        for_window [class="Wine" instance="steam.exe"] border none
+        for_window [class="pyrogenesis"] border none
+        for_window [class="Gpaste-ui"] border none
+        for_window [class="Wine" instance="epicgameslauncher.exe"] border none
+    # container -> workspace
+        assign [class="KeePass2"] $ws11
+        assign [class="keepassxc"] $ws11
+        assign [class="discord"] $ws12
+        assign [class="obs"] $ws13
+        assign [class="Rhythmbox"] $ws10
+        assign [class="banshee"] $ws10
+        assign [class="Spotify"] $ws10
+        # if started with "lxterminal -t cmus -e cmus"
+        assign [class="Lxterminal" title="^cmus$"] $ws10
+        assign [class="cantata"] $ws10
+        assign [class="Wine" instance="league of legends.exe"] $ws09
+        assign [class="Wine" instance="leagueclientux.exe"] $ws09
+        assign [class="Wine" instance="warframe.x64.exe"] $ws09
+        assign [class="Wine" instance="gta5.exe"] $ws09
+        assign [class="Wine" instance="gtavlauncher.exe"] $ws09
+        assign [class="Wine" instance="bethesda.net_launcher.exe"] $ws09
+        assign [class="Wine" instance="eso64.exe"] $ws09
+        assign [class="Wine" instance="dragon quest xi.exe"] $ws09
+        assign [class="Wine" instance="mystic vale_release.exe"] $ws09
+        assign [class="Hand of Fate 2.x86_64"] $ws09
+        assign [class="pyrogenesis"] $ws09
+        assign [class="Enigmatica 2"] $ws09
+        assign [class="Minecraft*"] $ws09
+# auto start
+    exec --no-startup-id setxkbmap -layout fi
+    exec --no-startup-id compton -b
+    exec flameshot
+    exec usbguard-applet-qt
+    #exec --no-startup-id banshee
+
+    #exec_always --no-startup-id xrdb -merge ~/.Xresources
+
+focus_follows_mouse yes

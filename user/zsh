@@ -1,0 +1,208 @@
+export EDITOR=vim
+
+alias ls='ls -h --color=auto'
+alias lsa='ls -A'
+alias l='ls -l'
+alias la='l -A'
+alias v='code-oss'
+alias e="\$EDITOR"
+alias q='exit'
+alias p='pushd'
+alias p.='pushd .'
+alias pp='popd'
+alias rs='source ~/.zshrc'
+alias :q='exit'
+alias ..='cd ..'
+alias xclip='xclip -selection clipboard'
+alias .='source'
+alias code='code --new-window'
+alias du='du -h'
+alias u='nc -N termbin.com 9999'
+alias j='java -jar'
+alias feh='feh --force-aliasing'
+alias ip='ip -color=auto'
+alias dd='dd status=progress'
+
+function fork() {
+    konsole &> /dev/null & disown
+}
+
+function cl() {
+    cd "$@" && ls
+}
+
+function c() {
+    printf "scale=3\n%s\n" "$1" | bc
+}
+
+function hex() {
+    printf "ibase=A\nobase=G\n%s\n" "$@" | bc
+}
+
+function dec() {
+    printf "ibase=G\nobase=A\n%s\n" "$@" | bc
+}
+
+function mc() {
+    mkdir -p "$@" && cd "$@" || return $?
+}
+
+function run() {
+    "$@" & disown
+}
+
+function x() {
+    for a in "$@"; do
+        fct="$(7z l "$a" | tail -n1 | sed 's/ /\n/g' | tail -n4)"
+        if [[ "$(echo -n "$fct" | tail -n1)" == "files" ]]; then
+            fct="$(echo -n "$fct" | tail -n2)"
+        fi
+        fc="$(echo -n "$fct" | head -n1)"
+        if [[ "$fc" -eq 1 ]]; then
+            7z l "$a"
+            7z x "$a"
+        else
+            f="${a##*/}"
+            echo "Extracting to \"${f%.*}\""
+            7z x -o"${f%.*}" "$a"
+        fi
+    done
+}
+
+function xflac() {
+    if [[ $# -eq 2 ]]; then
+        shnsplit -f "$1" -o "flac flac -s -8 -o %f -" -t "%n %t" "$2"
+    else
+        echo "Usage: xflac file.cue file.flac"
+    fi
+}
+
+function m4atoflac() {
+    for file in *.m4a; do ffmpeg -i "$file" -f flac "$(basename "$file" .m4a).flac"; done
+}
+
+function pvf() {
+    sed -i -e 's/#!\/usr\/bin\/env python/#!\/usr\/bin\/env python2/' -e 's/#!\/usr\/bin\/python/#!\/usr\/bin\/python2/' "$@"
+}
+
+function d() {
+    wget "$@"
+}
+
+rc_temp_file=""
+function rc() {
+    if ! [ "$rc_temp_file" ]; then
+        rc_temp_file="$(mktemp --suffix=".sh")"
+    fi
+    $EDITOR "$rc_temp_file"
+    if [[ -e "$rc_temp_file" ]]; then
+        chmod +x "$rc_temp_file"
+        "$rc_temp_file" "$@"
+    fi
+}
+
+function rc_zshexit() {
+    if [ "$rc_temp_file" ]; then
+        rm "$rc_temp_file"
+        rc_temp_file=""
+    fi
+}
+
+if ! (( ${zshexit_functions[(ie)rc_zshexit]} )); then
+    zshexit_functions+=(rc_zshexit)
+fi
+
+function gc() {
+    # gc - utility for easy git clone
+    service=
+    path=
+    folder=
+
+    # resolve args
+    if [[ $# -eq 1 ]]; then
+        git clone "$@"
+        return $?
+    elif [[ $# -eq 2 ]]; then
+        service="$1"
+        path="$2"
+    elif [[ $# -eq 3 ]]; then
+        service="$1"
+        path="$2"
+        folder="$3"
+    else
+        echo 'USAGE:'
+        echo 'gc <url>'
+        echo 'gc <service> <path> [folder]'
+        return 1
+    fi
+
+    # resolve service
+    url=
+    if [[ "$service" == "github" ]]; then
+        url="https://github.com/$path"
+    elif [[ "$service" == "gitlab" ]]; then
+        url="https://gitlab.com/$path"
+    else
+        echo "Unknown service"
+        return 2
+    fi
+
+    git clone "$url" "$folder"
+    return $?
+}
+
+function p-() {
+    popd > /dev/null && cd "$OLDPWD" && pushd "$OLDPWD" || return
+}
+
+function cdr() {
+    cd "$(realpath .)" || return $?
+}
+
+function hextobytes() {
+    IFS='' printf 'import sys\nsys.stdout.buffer.write(bytes.fromhex("%s"))\n' "$@" | python
+}
+
+function arma3extract() {
+    grep -o "\"http://steamcommunity.com/.*\" " "$@" | grep -o "[[:alnum:]/:\.\?=]*"
+}
+
+function update() {
+    yay -Syu
+}
+
+function pacman_package_data_size() {
+    # Usage: $0 [repo_names]
+    # See man pacman(8) -> SYNC OPTIONS -> -l --list
+    pacman -Qi $(pacman -Sql "$@" | grep -f <(pacman -Qq | sed -e 's/^/\^/g' -e 's/$/\$/g')) | grep 'Installed Size' | \
+        sed -e "s/Installed Size  : //g" -e "s/KiB/*1024/g" -e "s/MiB/*1024*1024/g" -e "s/GiB/*1024*1024*1024/g" -e "s/$/+/g" \
+        | tr -d '\n ' | sed -e 's/^/(/g' -e 's/+$/)\/1024\/1024\n/g' | bc | sed 's/$/ MiB/g'
+}
+
+function pacman_package_pkg_size() {
+    # Uasge: $ [repo_names]
+    # See man pacman(8) -> SYNC OPTIONS -> -l --list
+    sed_regex='([[:alnum:]@_\+][[:alnum:]@_\+\.-]*)[[:space:]](([[:digit:]]+\:)?[[:alnum:]\.\+_]+-[[:digit:]]+)[[:space:]](x86_64|any)'
+    pacman -Qi $(pacman -Sql "$@" | grep -f <(pacman -Qq | sed -e 's/^/\^/g' -e 's/$/\$/g')) | \
+        grep -e "Name *: " -e "Version *: " -e "Architecture *: " | sed -Ee "s/[[:alpha:]]+ +: //g" | \
+        sed -Eze "s/$sed_regex/\/var\/cache\/pacman\/pkg\/\1-\2-\4.pkg.tar.xz/g" | tr '\n' '\0' | du --files0-from=- -ch | tail -n1 | sed -E 's/[[:space:]]+total/iB/g'
+}
+
+# disable ctrl+s scroll lock
+stty -ixon
+
+if [[ -z "$XDG_DATA_HOME" ]]; then
+    XDG_DATA_HOME=$HOME/.local/share
+fi
+if [[ -z "$XDG_CONFIG_HOME" ]]; then
+    XDG_CONFIG_HOME=$HOME/.config
+fi
+if [[ -z "$XDG_CACHE_HOME" ]]; then
+    XDG_CACHE_HOME=$HOME/.cache
+fi
+
+# set zle to emacs mode
+bindkey -e
+
+# Enable ccache
+export USE_CCACHE=1

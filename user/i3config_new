@@ -1,0 +1,202 @@
+# i3 config file (v4)
+
+# General Keys
+    set $mod Mod4
+    set $alt Shift
+    set $alt2 Mod1
+    set $ctrl Ctrl
+
+    set $left j
+    set $right l
+    set $up i
+    set $down k
+
+# Workspaces
+    set $ws01 "1:1"
+    set $ws02 "2:2"
+    set $ws03 "3:3"
+    set $ws04 "4:4"
+    set $ws05 "5:5"
+    set $ws06 "6:6"
+    set $ws07 "7:7"
+    set $ws08 "8:8"
+    set $ws09 "9:9"
+    set $ws10 "10:10"
+
+    # Password Manager
+    set $ws11 "11:"
+    # Music
+    set $ws12 "12:"
+    # Comms
+    set $ws13 "13:"
+
+    set $ws01k 1
+    set $ws02k 2
+    set $ws03k 3
+    set $ws04k 4
+    set $ws05k 5
+    set $ws06k 6
+    set $ws07k 7
+    set $ws08k 8
+    set $ws09k 9
+    set $ws10k 0
+
+    set $ws11k p
+    set $ws12k m
+    set $ws13k n
+
+# Key Binds
+    # General
+        bindsym $mod+Return exec lxterminal
+
+    # Configs
+        bindsym $mod+$alt+Return exec code-oss -n ~/.uconfig/
+        bindsym $mod+$alt+r exec ~/.uconfig/update.sh
+
+    # System
+        bindsym $mod+$alt+x exec ~/.lock
+        bindsym $mod+$ctrl+End exec poweroff
+        bindsym $mod+$ctrl+$alt+End exec reboot
+
+    # Screenshot
+        bindsym Print exec flameshot gui
+        bindsym $mod+Print exec flameshot full -c
+        bindsym $mod+$alt+Print exec flameshot screen -c
+
+    # Containers General
+        bindsym $mod+$alt+q kill
+        bindsym $mod+f fullscreen toggle
+
+    # Containers Focus
+        bindsym $mod+$left  focus left
+        bindsym $mod+$right focus right
+        bindsym $mod+$up    focus up
+        bindsym $mod+$down  focus down
+
+        bindsym $mod+space focus mode_toggle
+
+        bindsym $mod+a focus parent
+        bindsym $mod+z focus child
+
+    # Container Edit Current
+        bindsym $mod+$alt+$left  move left
+        bindsym $mod+$alt+$right move right
+        bindsym $mod+$alt+$up    move up
+        bindsym $mod+$alt+$down  move down
+        bindsym $mod+$alt+space floating toggle
+
+        bindsym $mod+r mode "resize"
+        mode "resize" {
+            # Normal
+            bindsym $left  resize shrink width  10 px or 10 ppt
+            bindsym $right resize grow   width  10 px or 10 ppt
+            bindsym $up    resize shrink height 10 px or 10 ppt
+            bindsym $down  resize grow   height 10 px or 10 ppt
+
+            # Large
+            bindsym $alt+$left  resize shrink width  50 px or 50 ppt
+            bindsym $alt+$right resize grow   width  50 px or 50 ppt
+            bindsym $alt+$up    resize shrink height 50 px or 50 ppt
+            bindsym $alt+$down  resize grow   height 50 px or 50 ppt
+
+            # Fine
+            bindsym $alt2+$left  resize shrink width  1 px or 1 ppt
+            bindsym $alt2+$right resize grow   width  1 px or 1 ppt
+            bindsym $alt2+$up    resize shrink height 1 px or 1 ppt
+            bindsym $alt2+$down  resize grow   height 1 px or 1 ppt
+
+            bindsym Return mode "default"
+            bindsym Escape mode "default"
+        }
+
+    # Container Edit Layout
+        bindsym $mod+h split h
+        bindsym $mod+v split v
+
+    # Workspaces
+        bindsym $mod+$ws01k workspace $ws01
+        bindsym $mod+$ws02k workspace $ws02
+        bindsym $mod+$ws03k workspace $ws03
+        bindsym $mod+$ws04k workspace $ws04
+        bindsym $mod+$ws05k workspace $ws05
+        bindsym $mod+$ws06k workspace $ws06
+        bindsym $mod+$ws07k workspace $ws07
+        bindsym $mod+$ws08k workspace $ws08
+        bindsym $mod+$ws09k workspace $ws09
+        bindsym $mod+$ws10k workspace $ws10
+
+        bindsym $mod+$ws11k workspace $ws11
+        bindsym $mod+$ws12k workspace $ws12
+        bindsym $mod+$ws13k workspace $ws13
+
+        bindsym $mod+$alt+$ws01k move container to workspace $ws01
+        bindsym $mod+$alt+$ws02k move container to workspace $ws02
+        bindsym $mod+$alt+$ws03k move container to workspace $ws03
+        bindsym $mod+$alt+$ws04k move container to workspace $ws04
+        bindsym $mod+$alt+$ws05k move container to workspace $ws05
+        bindsym $mod+$alt+$ws06k move container to workspace $ws06
+        bindsym $mod+$alt+$ws07k move container to workspace $ws07
+        bindsym $mod+$alt+$ws08k move container to workspace $ws08
+        bindsym $mod+$alt+$ws09k move container to workspace $ws09
+        bindsym $mod+$alt+$ws10k move container to workspace $ws10
+
+    # Special (Media, etc...)
+        bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume (Media, etc...)
+        bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume (Media, etc...)
+        bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
+
+        bindsym XF86AudioPlay exec playerctl play-pause
+        bindsym XF86AudioStop exec playerctl stop
+        bindsym XF86AudioNext exec playerctl next
+        bindsym XF86AudioPrev exec playerctl prev
+
+        bindsym XF86MonBrightnessUp exec xbacklight -inc 25 # increase screen brightness
+        bindsym XF86MonBrightnessDown exec xbacklight -dec 25 # decrease screen brightness
+
+# Containers
+    # Defaults: Floating
+        for_window [class="Tor Browser"] floating enable
+        for_window [class="Galculator"] floating enable
+        for_window [class="PCSX2"] floating enable
+        #for_window [class="Virt-manager" window_type=normal title="^(.(?!Virtual Machine Manager))*$"] floating enable
+        for_window [class="Steam"] floating enable, [title="^Steam$"] floating disable
+        for_window [class="Qemu-system-x86_64"] floating enable
+        for_window [class="Godot"] floating enable, [title="^Godot Engine - "] floating disable
+        for_window [class="flameshot"] floating enable
+        for_window [class="Wine"] floating enable
+        for_window [class="VirtualBox Machine"] floating enable
+        for_window [class="scrcpy"] floating enable
+        for_window [class="kmines"] floating enable
+        for_window [class="Wine" instance="ti-nspire cx cas student software.exe"] floating enable, [title="TI-Nspire� CX CAS Student Software"] floating disable
+    # Defaults: Fullscreen
+        for_window [class="feh"] fullscreen enable
+        #for_window [class="Xephyr"] fullscreen disable
+        for_window [class="Wine" instance="league of legends.exe"] fullscreen enable
+        for_window [class="Wine" instance="warframe.x64.exe"] fullscreen enable
+        for_window [class="Wine" instance="gta5.exe"] fullscreen enable
+    # Defaults: General
+        for_window [tiling] border none
+        for_window [floating] border normal
+    # Defaults: Borders
+        for_window [class="Chromium"] border none
+        for_window [class="discord"] border none
+        for_window [class="Lxterminal"] border pixel 5
+        #for_window [class="Lxterminal"] border normal
+        for_window [class="URxvt"] border none
+        for_window [class="Steam"] border none
+        for_window [class="vlc"] border none
+        for_window [class="Wine" instance="leagueclientux.exe"] border none
+        for_window [class="Wine" instance="gtavlauncher.exe"] border none
+    # Workspace Assignmentes
+        assign [class="KeePass2"] $ws07
+        assign [class="keepassxc"] $ws07
+        assign [class="discord"] $ws08
+        assign [class="Rhythmbox"] $ws10
+        assign [class="banshee"] $ws10
+        assign [class="Wine" instance="league of legends.exe"] $ws09
+        assign [class="Wine" instance="leagueclientux.exe"] $ws09
+        assign [class="Wine" instance="warframe.x64.exe"] $ws09
+        assign [class="Wine" instance="gta5.exe"] $ws09
+        assign [class="Wine" instance="gtavlauncher.exe"] $ws09
+        # if started with "lxterminal -t cmus -e cmus"
+        assign [class="Lxterminal" title="^cmus$"] $ws10
