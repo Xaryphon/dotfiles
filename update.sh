@@ -83,6 +83,7 @@ function update_configs {
     echo Updating configs...
     update_config ~/.config/i3/config i3config
     update_config ~/.config/i3blocks/config i3blocks.conf
+    update_config ~/.config/i3blocks/config2 i3blocks2.conf
     install -m755 $base_dir/scripts/i3blocks_systemctl_status.sh ~/.config/i3blocks/systemctl_status.sh
     install -m755 $base_dir/scripts/i3blocks_public_ip.sh ~/.config/i3blocks/public_ip.sh
     install -m755 $base_dir/scripts/i3blocks_mediaplayer.sh ~/.config/i3blocks/mediaplayer.sh

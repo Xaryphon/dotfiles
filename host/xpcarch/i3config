@@ -53,7 +53,7 @@ bindsym $mod+o exec ~/Projects/Synced/Singles/instance.sh /run/user/1000/autocli
 
 # Primary Monitor Bar
 bar {
-        status_command i3blocks -c /dev/null
+        status_command i3blocks -c ~/.config/i3blocks/config2
         i3bar_command i3bar -t
         font pango:DejaVu Sans Book, FontAwesome 8.5
         tray_output none
