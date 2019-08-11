@@ -31,6 +31,11 @@ bindsym XF86AudioStop exec playerctl -p mpd pause && playerctl -p mpd position 0
 bindsym XF86AudioNext exec playerctl -p mpd next
 bindsym XF86AudioPrev exec playerctl -p mpd previous
 
+bindsym $mod+XF86AudioPlay exec playerctl play-pause
+bindsym $mod+XF86AudioStop exec playerctl pause && playerctl -p mpd position 0
+bindsym $mod+XF86AudioNext exec playerctl next
+bindsym $mod+XF86AudioPrev exec playerctl previous
+
 # HIDE ALL ($hide2 has ZWSP)
 set $hide1 "HIDDEN"
 set $hide2 "HIDDEN​"
