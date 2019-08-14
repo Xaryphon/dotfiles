@@ -188,6 +188,26 @@ function pacman_package_pkg_size() {
         sed -Eze "s/$sed_regex/\/var\/cache\/pacman\/pkg\/\1-\2-\4.pkg.tar.xz/g" | tr '\n' '\0' | du --files0-from=- -ch | tail -n1 | sed -E 's/[[:space:]]+total/iB/g'
 }
 
+function inotifywait_exec() {
+    if [ $# -lt 3 ]; then
+        echo "USAGE: $0 watchdir program [args...]" >&2
+        return 1 &> /dev/null
+        exit 1 &> /dev/null
+    fi
+
+    watchdir="$1"
+    shift
+
+    inotifywait -qrm "$watchdir" -e modify,attrib,move,move_self,create,delete,unmount | {
+        while read -r; do
+            while read -rt 1; do
+                true
+            done
+            "$@"
+        done
+    }
+}
+
 # disable ctrl+s scroll lock
 stty -ixon
 
