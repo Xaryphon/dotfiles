@@ -19,7 +19,6 @@ alias code='code --new-window'
 alias du='du -h'
 alias u='nc -N termbin.com 9999'
 alias j='java -jar'
-alias feh='feh --force-aliasing'
 alias ip='ip -color=auto'
 alias dd='dd status=progress'
 
