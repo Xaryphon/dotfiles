@@ -215,7 +215,7 @@ function pyenv() {
 
     envdir="$1"
     if ! [ -e "$envdir" ]; then
-        printf 'virtualenv "%s"' "$envdir"
+        printf 'virtualenv "%s"\n' "$envdir"
         virtualenv "$envdir"
         ec=$?
         if [ $ec -ne 0 ]; then
@@ -226,12 +226,12 @@ function pyenv() {
         echo "$envdir already exists, skipping"
     fi
 
-    if ! [ -x "$envdir/bin/activate" ]; then
+    if ! [ -e "$envdir/bin/activate" ]; then
         echo "$envdir/bin/activate does not exists"
         return 2
     fi
 
-    printf 'source %s' "$envdir/bin/activate"
+    printf 'source "%s"\n' "$envdir/bin/activate"
     source "$envdir/bin/activate"
     ec=$?
     if [ $ec -ne 0 ]; then
