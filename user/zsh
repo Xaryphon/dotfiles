@@ -207,6 +207,44 @@ function inotifywait_exec() {
     }
 }
 
+function pyenv() {
+    if [ $# -ne 1 ]; then
+        echo "USAGE: $0 virtualenvdir"
+        return 1
+    fi
+
+    envdir="$1"
+    if ! [ -e "$envdir" ]; then
+        printf 'virtualenv "%s"' "$envdir"
+        virtualenv "$envdir"
+        ec=$?
+        if [ $ec -ne 0 ]; then
+            echo "virtualenv exited with code $ec" >&2
+            return $ec
+        fi
+    else
+        echo "$envdir already exists, skipping"
+    fi
+
+    if ! [ -x "$envdir/bin/activate" ]; then
+        echo "$envdir/bin/activate does not exists"
+        return 2
+    fi
+
+    printf 'source %s' "$envdir/bin/activate"
+    source "$envdir/bin/activate"
+    ec=$?
+    if [ $ec -ne 0 ]; then
+        echo "Could not source $envdir/bin/activate" >&2
+        return 2
+    fi
+
+    if [ -e "requirements.txt" ]; then
+        echo "pip install -r requirements.txt"
+        pip install -r requirements.txt
+    fi
+}
+
 # disable ctrl+s scroll lock
 stty -ixon
 
