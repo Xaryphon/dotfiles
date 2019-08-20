@@ -199,7 +199,7 @@ function inotifywait_exec() {
 
     inotifywait -qrm "$watchdir" -e modify,attrib,move,move_self,create,delete,unmount | {
         while read -r; do
-            while read -rt 1; do
+            while read -rt 0.1; do
                 true
             done
             "$@"
