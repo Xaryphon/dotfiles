@@ -54,7 +54,8 @@ exec sudo adb start-server
 exec numlockx
 
 # Auto Clicker
-bindsym $mod+o exec ~/Projects/Synced/Singles/instance.sh /run/user/1000/autoclicker ~/Projects/Synced/Singles/autoclicker.sh
+bindsym $mod+o exec --no-startup-id ~/.config/i3/autoclicker.sh
+bindsym $mod+p exec --no-startup-id env M=3 ~/.config/i3/autoclicker.sh
 
 # Primary Monitor Bar
 bar {
