@@ -27,8 +27,8 @@
         bindsym Ctrl+Mod1+End exec systemctl poweroff
     # screenshot
         bindsym Print exec flameshot gui
-        bindsym $mod+Print exec flameshot full -c
-        bindsym $mod+$alt+Print exec flameshot screen -c
+        bindsym $mod+Print exec flameshot screen -c
+        bindsym $mod+$alt+Print exec flameshot full -c
 # container keybinds
     # change focus
         bindsym $mod+$left  focus left
