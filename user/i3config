@@ -194,7 +194,7 @@
         for_window [class="anbox"] border none
         for_window [class="Wine" instance="leagueclientux.exe"] border none
         for_window [class="Wine" instance="gtavlauncher.exe"] border none
-        for_window [class="Wine" instance="bethesda.net_launcher.exe"] border none
+        for_window [class="steam_app_306130" instance="bethesda.net_launcher.exe"] border none
         for_window [class="Wine" instance="steam.exe"] border none
         for_window [class="pyrogenesis"] border none
         for_window [class="Gpaste-ui"] border none
