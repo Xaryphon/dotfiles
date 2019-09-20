@@ -99,3 +99,4 @@ bar {
 #exec ~/boot_log.sh
 
 exec glava
+exec nextcloud
