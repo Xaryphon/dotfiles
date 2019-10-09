@@ -219,6 +219,7 @@
         assign [class="Wine" instance="eso64.exe"] $ws09
         assign [class="Wine" instance="dragon quest xi.exe"] $ws09
         assign [class="Wine" instance="mystic vale_release.exe"] $ws09
+        assign [class="Wine" instance="riotclientux.exe"] $ws09
         assign [class="Hand of Fate 2.x86_64"] $ws09
         assign [class="pyrogenesis"] $ws09
         assign [class="Enigmatica 2"] $ws09
