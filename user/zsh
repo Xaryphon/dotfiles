@@ -1,5 +1,12 @@
 export EDITOR=vim
 
+# Let's close unneeded fds
+# (caused by bad programs not closing fds on exec)
+# Looking at you vscode >:(
+for myfd in $(ls /proc/$$/fd); do
+    [ $myfd -gt 2 ] && exec {myfd}>&-
+done 2>/dev/null
+
 alias ls='ls -h --color=auto'
 alias lsa='ls -A'
 alias l='ls -l'
